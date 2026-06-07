@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VInculacion - Traductor LSEC</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-label="Camara y deteccion">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Lengua de señas ecuatoriana</p>
+            <h1>VInculacion</h1>
+          </div>
+          <div class="top-actions">
+            <button id="adminToggleButton" type="button" class="secondary">Inicio de sesion administrador</button>
+            <div class="status" id="modelStatus">Cargando modelos...</div>
+          </div>
+        </header>
+
+        <div class="admin-login hidden" id="adminLoginPanel">
+          <label class="field">
+            <span>Usuario</span>
+            <input id="adminUserInput" type="text" autocomplete="username" />
+          </label>
+          <label class="field">
+            <span>Contrasena</span>
+            <input id="adminPasswordInput" type="password" autocomplete="current-password" />
+          </label>
+          <button id="adminSubmitButton" type="button">Entrar</button>
+          <p class="helper" id="adminStatusText">Modo local: tus cambios solo quedan en esta computadora.</p>
+        </div>
+
+        <div class="stage">
+          <video id="webcam" autoplay playsinline muted></video>
+          <canvas id="overlay"></canvas>
+          <div class="camera-empty" id="cameraEmpty">
+            <strong>Activa la camara</strong>
+            <span>El tracking se ejecuta localmente en tu navegador.</span>
+          </div>
+        </div>
+
+        <div class="controls" aria-label="Controles">
+          <button id="cameraButton" type="button">Iniciar camara</button>
+          <button id="flipButton" type="button">Cambiar camara</button>
+          <button id="modeButton" type="button" class="secondary">Modo: palabras</button>
+          <button id="clearPhraseButton" type="button">Limpiar frase</button>
+        </div>
+      </section>
+
+      <aside class="inspector" aria-label="Traduccion">
+        <section class="panel live-panel">
+          <div class="panel-heading">
+            <h2>Traduccion en tiempo real</h2>
+            <span id="fpsLabel">0 fps</span>
+          </div>
+          <p class="translation" id="translationText">Esperando senia...</p>
+          <p class="confidence" id="confidenceText">Confianza: --</p>
+          <div class="phrase" id="phraseText"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>Entrenar senia Ecuador</h2>
+          </div>
+          <label class="field">
+            <span>Nombre de la senia</span>
+            <input id="signNameInput" type="text" placeholder="Ej: gracias, agua, ayuda" />
+          </label>
+          <p class="scope-status" id="signScopeText">Guardado local</p>
+          <div class="train-actions">
+            <button id="captureButton" type="button">Capturar muestra</button>
+            <button id="captureMotionButton" type="button" class="secondary">Captura con movimiento</button>
+            <button id="saveButton" type="button">Guardar senia</button>
+          </div>
+          <p class="helper" id="sampleCounter">0 muestras listas</p>
+          <div class="sample-list" id="pendingSampleList"></div>
+          <label class="field search-field">
+            <span>Buscar senia guardada</span>
+            <input id="signSearchInput" type="search" placeholder="Buscar palabra o frase" disabled />
+          </label>
+          <div class="sign-list" id="signList"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <h2>Abecedario LSEC</h2>
+            <span id="letterStatus">LSEC</span>
+          </div>
+          <p class="letter-output" id="letterOutput">--</p>
+          <label class="field">
+            <span>Letra o sonido para entrenar</span>
+            <select id="letterSelect" aria-label="Letra para entrenar"></select>
+          </label>
+          <p class="scope-status" id="letterScopeText">Guardado local</p>
+          <div class="train-actions">
+            <button id="captureLetterButton" type="button">Capturar letra</button>
+            <button id="captureLetterMotionButton" type="button" class="secondary">Captura con movimiento</button>
+            <button id="saveLetterButton" type="button">Guardar letra</button>
+          </div>
+          <p class="helper" id="letterSampleCounter">0 muestras de letra</p>
+          <div class="sample-list" id="pendingLetterSampleList"></div>
+          <label class="field search-field">
+            <span>Buscar letra guardada</span>
+            <input id="letterSearchInput" type="search" placeholder="Buscar letra o sonido" disabled />
+          </label>
+          <div class="sign-list" id="letterList"></div>
+        </section>
+
+        <section class="panel compact">
+          <h2>Senias base</h2>
+          <ul>
+            <li>Mano abierta: hola</li>
+            <li>Puno cerrado: si / afirmacion</li>
+            <li>Pulgar arriba: bien</li>
+            <li>Indice arriba: atencion</li>
+            <li>Abecedario: combina reglas y tus muestras</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
