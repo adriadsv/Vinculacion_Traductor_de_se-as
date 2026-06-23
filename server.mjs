@@ -6,8 +6,10 @@ import { extname, join, normalize } from "node:path";
 
 const root = process.cwd();
 const port = Number(process.env.PORT ?? 5173);
-const globalDataPath = join(root, "data", "global-data.json");
 loadEnvFile();
+const defaultDataPath = join(root, "data", "global-data.json");
+const dataDir = process.env.DATA_DIR ?? join(root, "data");
+const globalDataPath = join(dataDir, "global-data.json");
 const adminUser = process.env.ADMIN_USER ?? "";
 const adminPassword = process.env.ADMIN_PASSWORD ?? "";
 const adminToken = process.env.ADMIN_TOKEN ?? randomUUID();
@@ -19,7 +21,7 @@ const types = {
   ".json": "application/json; charset=utf-8"
 };
 
-mkdirSync(join(root, "data"), { recursive: true });
+mkdirSync(dataDir, { recursive: true });
 
 createServer(async (request, response) => {
   const url = new URL(request.url ?? "/", `http://${request.headers.host}`);
@@ -37,8 +39,8 @@ createServer(async (request, response) => {
 
   response.setHeader("Content-Type", types[extname(filePath)] ?? "application/octet-stream");
   createReadStream(filePath).pipe(response);
-}).listen(port, "127.0.0.1", () => {
-  console.log(`VInculacion listo en http://localhost:${port}`);
+}).listen(port, "0.0.0.0", () => {
+  console.log(`VInculacion listo en el puerto ${port}`);
 });
 
 async function handleApi(request, response, url) {
@@ -126,7 +128,7 @@ async function handleApi(request, response, url) {
 
 async function readGlobalData() {
   try {
-    const raw = await readFile(globalDataPath, "utf8");
+    const raw = await readFile(globalDataPath, "utf8").catch(() => readFile(defaultDataPath, "utf8"));
     const data = JSON.parse(raw);
     return {
       signs: Array.isArray(data.signs) ? data.signs : [],
